@@ -47,7 +47,7 @@ async function fetchDirectlyIntoDOM() {
                                }
                              });
 
-  await response.body
+  await response.get_body()
       .pipeThrough(new TextDecoder())
       .pipeTo(targetDiv.writable);
 }

@@ -46,7 +46,7 @@ self.addEventListener('fetch', event => {
   if (url.searchParams.has('use-fetch-stream')) {
     event.respondWith(async function() {
       const response = await fetch('pass.txt');
-      return new Response(response.body);
+      return new Response(response.get_body());
     }());
     return;
   }

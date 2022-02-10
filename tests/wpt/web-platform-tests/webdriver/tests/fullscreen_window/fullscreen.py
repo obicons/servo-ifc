@@ -28,9 +28,9 @@ def test_payload(session):
     response = fullscreen(session)
 
     assert response.status == 200
-    assert isinstance(response.body["value"], dict)
+    assert isinstance(response.get_body()["value"], dict)
 
-    value = response.body["value"]
+    value = response.get_body()["value"]
     assert "width" in value
     assert "height" in value
     assert "x" in value

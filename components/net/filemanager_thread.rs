@@ -361,7 +361,7 @@ impl FileManager {
                 self.fetch_file_in_chunks(
                     &mut done_sender.clone(),
                     reader,
-                    response.body.clone(),
+                    response.get_body().clone(),
                     cancellation_listener,
                     range,
                 );

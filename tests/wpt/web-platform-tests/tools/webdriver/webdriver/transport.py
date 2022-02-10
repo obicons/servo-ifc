@@ -107,7 +107,7 @@ class HTTPWireProtocol(object):
 
         session = webdriver.Session("127.0.0.1", 4444)
         response = transport.send("GET", "element/active", None)
-        print response.body["value"]
+        print response.get_body()["value"]
         # => {u'element-6066-11e4-a52e-4f735466cecf': u'<uuid>'}
 
     Automatic marshaling is provided by ``webdriver.protocol.Encoder``
@@ -119,7 +119,7 @@ class HTTPWireProtocol(object):
         response = transport.send("GET", "element/active", None,
             encoder=protocol.Encoder, decoder=protocol.Decoder,
             session=session)
-        print response.body["value"]
+        print response.get_body()["value"]
         # => webdriver.Element
     """
 

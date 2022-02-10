@@ -115,7 +115,7 @@ promise_test(function(test) {
 function checkBlobResponseBody(blobBody, blobData, bodyType, checkFunction) {
   promise_test(function(test) {
     var response = new Response(blobBody);
-    assert_false(response.bodyUsed, "bodyUsed is false at init");
+    assert_false(response.get_body()Used, "bodyUsed is false at init");
     return checkFunction(response, blobData);
   }, "Consume blob response's body as " + bodyType);
 }

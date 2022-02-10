@@ -391,8 +391,8 @@ def test_payload(session):
     response = set_window_rect(session, {"x": 400, "y": 400})
 
     assert response.status == 200
-    assert isinstance(response.body["value"], dict)
-    value = response.body["value"]
+    assert isinstance(response.get_body()["value"], dict)
+    value = response.get_body()["value"]
     assert "width" in value
     assert "height" in value
     assert "x" in value

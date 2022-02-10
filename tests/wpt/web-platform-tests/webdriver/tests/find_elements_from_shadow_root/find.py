@@ -139,4 +139,4 @@ def test_no_element(session, get_shadow_page, using, value):
     custom_element = session.find.css("custom-shadow-element", all=False)
     shadow_root = custom_element.shadow_root
     response = find_elements(session, shadow_root.id, using, value)
-    assert response.body["value"] == []
+    assert response.get_body()["value"] == []

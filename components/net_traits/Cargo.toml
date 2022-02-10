@@ -31,6 +31,7 @@ msg = { path = "../msg" }
 num-traits = "0.2"
 percent-encoding = "2.0"
 pixels = { path = "../pixels" }
+structs = { path = "../../info-flow-library/ifc_library/secret_structs/", package="secret_structs" }
 serde = "1.0"
 servo_arc = { path = "../servo_arc" }
 servo_rand = { path = "../rand" }

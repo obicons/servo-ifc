@@ -78,12 +78,12 @@ def test_set_to_state(session, url, state, realmSetting):
         assert_error(response, "invalid argument")
         return
 
-    assert response.body.get("value") == None
+    assert response.get_body().get("value") == None
 
     response = query(session, "geolocation")
 
     assert_success(response)
-    result = response.body.get("value")
+    result = response.get_body().get("value")
 
     assert isinstance(result, dict)
     assert result.get("status") == "success"
@@ -122,14 +122,14 @@ def test_set_to_state_cross_realm(session, url, state, realmSetting):
         assert_error(response, "invalid argument")
         return
 
-    assert response.body.get("value") == None
+    assert response.get_body().get("value") == None
 
     session.window_handle = original_window
 
     response = query(session, "geolocation")
 
     assert_success(response)
-    result = response.body.get("value")
+    result = response.get_body().get("value")
 
     assert isinstance(result, dict)
     assert result.get("status") == "success"

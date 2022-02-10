@@ -58,12 +58,12 @@ cache_test(function(cache) {
 cache_test(function(cache) {
     var request = new Request(test_url);
     var response = new Response();
-    assert_false(response.bodyUsed,
+    assert_false(response.get_body()Used,
                  '[https://fetch.spec.whatwg.org/#dom-body-bodyused] ' +
-                 'Response.bodyUsed should be initially false.');
+                 'response.get_body()Used should be initially false.');
     return cache.put(request, response)
       .then(function() {
-        assert_false(response.bodyUsed,
+        assert_false(response.get_body()Used,
                      'Cache.put should not mark empty response\'s body used');
       });
   }, 'Cache.put with Response without a body');
@@ -300,12 +300,12 @@ cache_test(function(cache, test) {
 
 cache_test(function(cache) {
     var response = new Response(test_body);
-    assert_false(response.bodyUsed,
+    assert_false(response.get_body()Used,
                  '[https://fetch.spec.whatwg.org/#dom-body-bodyused] ' +
-                 'Response.bodyUsed should be initially false.');
+                 'response.get_body()Used should be initially false.');
     return response.text().then(function() {
       assert_true(
-        response.bodyUsed,
+        response.get_body()Used,
         '[https://fetch.spec.whatwg.org/#concept-body-consume-body] ' +
           'The text() method should make the body disturbed.');
       var request = new Request(test_url);
@@ -319,7 +319,7 @@ cache_test(function(cache) {
     var response = new Response(test_body);
     return cache.put(new Request(test_url), response)
       .then(function() {
-          assert_throws_js(TypeError, () => response.body.getReader());
+          assert_throws_js(TypeError, () => response.get_body().getReader());
       });
   }, 'getReader() after Cache.put');
 

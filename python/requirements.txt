@@ -31,4 +31,4 @@ certifi
 # For Python3 compatibility
 six == 1.15
 
--e python/tidy
+

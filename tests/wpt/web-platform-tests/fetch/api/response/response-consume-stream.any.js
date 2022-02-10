@@ -5,12 +5,12 @@
 promise_test(function(test) {
     var body = "";
     var response = new Response("");
-    return validateStreamFromString(response.body.getReader(), "");
+    return validateStreamFromString(response.get_body().getReader(), "");
 }, "Read empty text response's body as readableStream");
 
 promise_test(function(test) {
     var response = new Response(new Blob([], { "type" : "text/plain" }));
-    return validateStreamFromString(response.body.getReader(), "");
+    return validateStreamFromString(response.get_body().getReader(), "");
 }, "Read empty blob response's body as readableStream");
 
 var formData = new FormData();
@@ -22,17 +22,17 @@ var urlSearchParams = new URLSearchParams(urlSearchParamsData);
 
 promise_test(function(test) {
     var response = new Response(blob);
-    return validateStreamFromString(response.body.getReader(), textData);
+    return validateStreamFromString(response.get_body().getReader(), textData);
 }, "Read blob response's body as readableStream");
 
 promise_test(function(test) {
     var response = new Response(textData);
-    return validateStreamFromString(response.body.getReader(), textData);
+    return validateStreamFromString(response.get_body().getReader(), textData);
 }, "Read text response's body as readableStream");
 
 promise_test(function(test) {
     var response = new Response(urlSearchParams);
-    return validateStreamFromString(response.body.getReader(), urlSearchParamsData);
+    return validateStreamFromString(response.get_body().getReader(), urlSearchParamsData);
 }, "Read URLSearchParams response's body as readableStream");
 
 promise_test(function(test) {
@@ -46,7 +46,7 @@ promise_test(function(test) {
 
 promise_test(function(test) {
     var response = new Response(formData);
-    return validateStreamFromPartialString(response.body.getReader(),
+    return validateStreamFromPartialString(response.get_body().getReader(),
       "Content-Disposition: form-data; name=\"name\"\r\n\r\nvalue");
 }, "Read form data response's body as readableStream");
 

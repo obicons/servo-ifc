@@ -46,7 +46,7 @@ promise_test(function() {
 
         // Create a read request, incidentally resolving a promise with an
         // object value, thereby invoking the getter installed above.
-        return response.body.getReader().read();
+        return response.get_body().getReader().read();
     });
 }, "reading from a body stream should occur in a microtask scope");
   </script>

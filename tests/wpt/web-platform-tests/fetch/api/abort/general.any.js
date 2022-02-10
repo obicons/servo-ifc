@@ -401,7 +401,7 @@ promise_test(async t => {
   requestAbortKeys.push(abortKey);
 
   const response = await fetch(`../resources/infinite-slow-response.py?stateKey=${stateKey}&abortKey=${abortKey}`, { signal });
-  const reader = response.body.getReader();
+  const reader = response.get_body().getReader();
 
   controller.abort();
 
@@ -430,7 +430,7 @@ promise_test(async t => {
   requestAbortKeys.push(abortKey);
 
   const response = await fetch(`../resources/infinite-slow-response.py?stateKey=${stateKey}&abortKey=${abortKey}`, { signal });
-  const reader = response.body.getReader();
+  const reader = response.get_body().getReader();
 
   await reader.read();
 
@@ -462,7 +462,7 @@ promise_test(async t => {
   // Read whole response to ensure close signal has sent.
   await response.clone().text();
 
-  const reader = response.body.getReader();
+  const reader = response.get_body().getReader();
 
   controller.abort();
 

@@ -14,6 +14,9 @@ use servo_url::ServoUrl;
 use std::sync::atomic::AtomicBool;
 use std::sync::Mutex;
 
+use structs::secret::secret as secrets;
+use structs::lattice::ternary_lattice as lattice;
+
 /// [Response type](https://fetch.spec.whatwg.org/#concept-response-type)
 #[derive(Clone, Debug, Deserialize, MallocSizeOf, PartialEq, Serialize)]
 pub enum ResponseType {
@@ -96,7 +99,9 @@ pub struct Response {
     #[ignore_malloc_size_of = "Defined in hyper"]
     pub headers: HeaderMap,
     #[ignore_malloc_size_of = "Mutex heap size undefined"]
-    pub body: Arc<Mutex<ResponseBody>>,
+    //pub body: Arc<Mutex<ResponseBody>>,
+    //body: secrets::Secret<Arc<Mutex<ResponseBody>>, lattice::C>,
+    body: Arc<Mutex<secrets::Secret<ResponseBody, lattice::C>>>,
     pub cache_state: CacheState,
     pub https_state: HttpsState,
     pub referrer: Option<ServoUrl>,
@@ -128,7 +133,7 @@ impl Response {
             status: Some((StatusCode::OK, "".to_string())),
             raw_status: Some((200, b"".to_vec())),
             headers: HeaderMap::new(),
-            body: Arc::new(Mutex::new(ResponseBody::Empty)),
+            body: Arc::new(Mutex::new(secrets::Secret::new(ResponseBody::Empty))),
             cache_state: CacheState::None,
             https_state: HttpsState::None,
             referrer: None,
@@ -153,6 +158,21 @@ impl Response {
         res
     }
 
+    pub fn get_body(&self) -> Arc<Mutex<ResponseBody>> {
+        if self.response_type == ResponseType::Opaque {
+            Arc::new(Mutex::new(ResponseBody::Empty))
+        } else {
+            unsafe {
+                std::mem::transmute(Arc::clone(&self.body))
+            }
+        }
+    }
+
+    pub fn set_body(&mut self, body: Arc<Mutex<ResponseBody>>) {
+        let b = (*body).lock().unwrap().clone();
+        self.body = Arc::new(Mutex::new(secrets::Secret::new(b)) );
+    }
+
     pub fn network_error(e: NetworkError) -> Response {
         Response {
             response_type: ResponseType::Error(e),
@@ -162,7 +182,7 @@ impl Response {
             status: None,
             raw_status: None,
             headers: HeaderMap::new(),
-            body: Arc::new(Mutex::new(ResponseBody::Empty)),
+            body: Arc::new(Mutex::new(secrets::Secret::new(ResponseBody::Empty))),
             cache_state: CacheState::None,
             https_state: HttpsState::None,
             referrer: None,
@@ -279,14 +299,14 @@ impl Response {
                 response.url = None;
                 response.headers = HeaderMap::new();
                 response.status = None;
-                response.body = Arc::new(Mutex::new(ResponseBody::Empty));
+                response.set_body(Arc::new(Mutex::new(ResponseBody::Empty)));
                 response.cache_state = CacheState::None;
             },
 
             ResponseType::OpaqueRedirect => {
                 response.headers = HeaderMap::new();
                 response.status = None;
-                response.body = Arc::new(Mutex::new(ResponseBody::Empty));
+                response.set_body(Arc::new(Mutex::new(ResponseBody::Empty)));
                 response.cache_state = CacheState::None;
             },
         }

@@ -10,7 +10,7 @@ for (const bodySource of ["fetch", "stream", "string"]) {
         response[consumeAs]();
         assert_not_equals(response.body, null);
         assert_throws_js(TypeError, function () {
-          response.body.getReader();
+          response.get_body().getReader();
         });
       },
       `Getting a body reader after consuming as ${consumeAs} (body source: ${bodySource})`,

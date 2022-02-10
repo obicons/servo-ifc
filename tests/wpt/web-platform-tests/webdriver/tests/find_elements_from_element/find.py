@@ -114,7 +114,7 @@ def test_no_element(session, inline, using, value):
     session.url = inline("<div></div>")
     element = session.find.css("div", all=False)
     response = find_elements(session, element.id, using, value)
-    assert response.body["value"] == []
+    assert response.get_body()["value"] == []
 
 
 @pytest.mark.parametrize("using,value",

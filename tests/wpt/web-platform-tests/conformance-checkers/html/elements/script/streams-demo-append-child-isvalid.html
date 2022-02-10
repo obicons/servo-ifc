@@ -77,7 +77,7 @@ async function fetchThenJSONToDOM() {
                                });
 
   const table = createTable(targetDiv);
-  return response.body
+  return response.get_body()
     .pipeThrough(new TextDecoder())
     .pipeThrough(splitStream('\n'))
     .pipeThrough(parseJSON())

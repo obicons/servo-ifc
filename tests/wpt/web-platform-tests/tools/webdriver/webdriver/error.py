@@ -196,16 +196,16 @@ def from_response(response):
             response.status,
             None,
             "Response is not an error:\n"
-            "%s" % json.dumps(response.body))
+            "%s" % json.dumps(response.get_body()))
 
-    if "value" in response.body:
-        value = response.body["value"]
+    if "value" in response.get_body():
+        value = response.get_body()["value"]
     else:
         raise UnknownErrorException(
             response.status,
             None,
             "Expected 'value' key in response body:\n"
-            "%s" % json.dumps(response.body))
+            "%s" % json.dumps(response.get_body()))
 
     # all fields must exist, but stacktrace can be an empty string
     code = value["error"]

@@ -473,7 +473,7 @@ fn test_load_should_decode_the_response_as_deflate_when_response_headers_have_co
     let internal_response = response.internal_response.unwrap();
     assert!(internal_response.status.clone().unwrap().0.is_success());
     assert_eq!(
-        *internal_response.body.lock().unwrap(),
+        *internal_response.get_body().lock().unwrap(),
         ResponseBody::Done(b"Yay!".to_vec())
     );
 }
@@ -506,7 +506,7 @@ fn test_load_should_decode_the_response_as_gzip_when_response_headers_have_conte
     let internal_response = response.internal_response.unwrap();
     assert!(internal_response.status.clone().unwrap().0.is_success());
     assert_eq!(
-        *internal_response.body.lock().unwrap(),
+        *internal_response.get_body().lock().unwrap(),
         ResponseBody::Done(b"Yay!".to_vec())
     );
 }
@@ -1108,7 +1108,7 @@ fn test_load_succeeds_with_a_redirect_loop() {
     let response = response.to_actual();
     assert_eq!(response.url_list, [url_a.clone(), url_b, url_a]);
     assert_eq!(
-        *response.body.lock().unwrap(),
+        *response.get_body().lock().unwrap(),
         ResponseBody::Done(b"Success".to_vec())
     );
 }
@@ -1147,7 +1147,7 @@ fn test_load_follows_a_redirect() {
     let internal_response = response.internal_response.unwrap();
     assert!(internal_response.status.clone().unwrap().0.is_success());
     assert_eq!(
-        *internal_response.body.lock().unwrap(),
+        *internal_response.get_body().lock().unwrap(),
         ResponseBody::Done(b"Yay!".to_vec())
     );
 }
@@ -1230,7 +1230,7 @@ fn test_redirect_from_x_to_y_provides_y_cookies_from_y() {
     let internal_response = response.internal_response.unwrap();
     assert!(internal_response.status.clone().unwrap().0.is_success());
     assert_eq!(
-        *internal_response.body.lock().unwrap(),
+        *internal_response.get_body().lock().unwrap(),
         ResponseBody::Done(b"Yay!".to_vec())
     );
 }
@@ -1279,7 +1279,7 @@ fn test_redirect_from_x_to_x_provides_x_with_cookie_from_first_response() {
     let internal_response = response.internal_response.unwrap();
     assert!(internal_response.status.clone().unwrap().0.is_success());
     assert_eq!(
-        *internal_response.body.lock().unwrap(),
+        *internal_response.get_body().lock().unwrap(),
         ResponseBody::Done(b"Yay!".to_vec())
     );
 }

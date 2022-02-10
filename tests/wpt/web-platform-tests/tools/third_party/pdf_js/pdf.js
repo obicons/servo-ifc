@@ -24354,7 +24354,7 @@ function () {
         throw (0, _network_utils.createResponseStatusError)(response.status, url);
       }
 
-      _this._reader = response.body.getReader();
+      _this._reader = response.get_body().getReader();
 
       _this._headersCapability.resolve();
 
@@ -24529,7 +24529,7 @@ function () {
 
       _this2._readCapability.resolve();
 
-      _this2._reader = response.body.getReader();
+      _this2._reader = response.get_body().getReader();
     });
     this.onProgress = null;
   }

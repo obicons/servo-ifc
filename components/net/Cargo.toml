@@ -51,6 +51,7 @@ percent-encoding = "2.0"
 pixels = { path = "../pixels" }
 profile_traits = { path = "../profile_traits" }
 rayon = "1"
+structs = { path = "../../info-flow-library/ifc_library/secret_structs/", package="secret_structs" }
 serde = "1.0"
 serde_json = "1.0"
 servo_allocator = { path = "../allocator" }
