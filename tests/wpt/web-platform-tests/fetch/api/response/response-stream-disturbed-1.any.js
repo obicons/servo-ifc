@@ -3,7 +3,7 @@
 
 function createResponseWithReadableStream(callback) {
     return fetch("../resources/data.json").then(function(response) {
-        var reader = response.body.getReader();
+        var reader = response.get_body().getReader();
         reader.releaseLock();
         return callback(response);
     });

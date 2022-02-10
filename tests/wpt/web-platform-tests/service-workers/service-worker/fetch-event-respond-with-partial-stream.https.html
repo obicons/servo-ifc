@@ -23,7 +23,7 @@ promise_test(async t => {
 
   let response = await frame.contentWindow.fetch('partial-stream.txt');
 
-  let reader = response.body.getReader();
+  let reader = response.get_body().getReader();
 
   let encoder = new TextEncoder();
   let decoder = new TextDecoder();

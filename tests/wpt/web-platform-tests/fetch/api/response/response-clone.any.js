@@ -37,17 +37,17 @@ test(function() {
 }, "Check Response's clone has the expected attribute values");
 
 promise_test(function(test) {
-  return validateStreamFromString(response.body.getReader(), body);
+  return validateStreamFromString(response.get_body().getReader(), body);
 }, "Check orginal response's body after cloning");
 
 promise_test(function(test) {
-  return validateStreamFromString(clonedResponse.body.getReader(), body);
+  return validateStreamFromString(clonedresponse.get_body().getReader(), body);
 }, "Check cloned response's body");
 
 promise_test(function(test) {
   var disturbedResponse = new Response("data");
   return disturbedResponse.text().then(function() {
-      assert_true(disturbedResponse.bodyUsed, "response is disturbed");
+      assert_true(disturbedresponse.get_body()Used, "response is disturbed");
       assert_throws_js(TypeError, function() { disturbedResponse.clone(); },
         "Expect TypeError exception");
   });
@@ -93,7 +93,7 @@ function testReadableStreamClone(initialBuffer, bufferType)
         }}));
 
         var clone = response.clone();
-        var stream1 = response.body;
+        var stream1 = response.get_body();
         var stream2 = clone.body;
 
         var buffer;

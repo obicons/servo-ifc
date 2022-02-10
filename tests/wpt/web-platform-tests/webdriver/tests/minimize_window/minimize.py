@@ -44,7 +44,7 @@ def test_payload(session):
     value = assert_success(response)
     assert isinstance(value, dict)
 
-    value = response.body["value"]
+    value = response.get_body()["value"]
     assert "width" in value
     assert "height" in value
     assert "x" in value

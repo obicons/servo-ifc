@@ -44,6 +44,8 @@ use tokio::sync::mpsc::{
     unbounded_channel, UnboundedReceiver as TokioReceiver, UnboundedSender as TokioSender,
 };
 
+use structs as secrets;
+
 lazy_static! {
     static ref X_CONTENT_TYPE_OPTIONS: HeaderName =
         HeaderName::from_static("x-content-type-options");
@@ -432,7 +434,8 @@ pub async fn main_fetch(
         {
             // when Fetch is used only asynchronously, we will need to make sure
             // that nothing tries to write to the body at this point
-            let mut body = internal_response.body.lock().unwrap();
+            let body_a = internal_response.get_body();
+            let mut body = body_a.lock().unwrap();
             *body = ResponseBody::Empty;
         }
 
@@ -535,7 +538,8 @@ async fn wait_for_response(
             }
         }
     } else {
-        let body = response.actual_response().body.lock().unwrap();
+        let resp_body = response.actual_response().get_body();
+        let body = resp_body.lock().unwrap();
         if let ResponseBody::Done(ref vec) = *body {
             // in case there was no channel to wait for, the body was
             // obtained synchronously via scheme_fetch for data/file/about/etc
@@ -620,7 +624,7 @@ fn create_blank_reply(url: ServoUrl, timing_type: ResourceTimingType) -> Respons
     response
         .headers
         .typed_insert(ContentType::from(mime::TEXT_HTML_UTF_8));
-    *response.body.lock().unwrap() = ResponseBody::Done(vec![]);
+    *response.get_body().lock().unwrap() = ResponseBody::Done(vec![]);
     response.status = Some((StatusCode::OK, "OK".to_string()));
     response.raw_status = Some((StatusCode::OK.as_u16(), b"OK".to_vec()));
     response
@@ -679,7 +683,7 @@ async fn scheme_fetch(
             Ok((mime, bytes)) => {
                 let mut response =
                     Response::new(url, ResourceFetchTiming::new(request.timing_type()));
-                *response.body.lock().unwrap() = ResponseBody::Done(bytes);
+                *response.get_body().lock().unwrap() = ResponseBody::Done(bytes);
                 response.headers.typed_insert(ContentType::from(mime));
                 response.status = Some((StatusCode::OK, "OK".to_string()));
                 response.raw_status = Some((StatusCode::OK.as_u16(), b"OK".to_vec()));
@@ -747,12 +751,12 @@ async fn scheme_fetch(
                     let (mut done_sender, done_receiver) = unbounded_channel();
                     *done_chan = Some((done_sender.clone(), done_receiver));
 
-                    *response.body.lock().unwrap() = ResponseBody::Receiving(vec![]);
+                    *response.get_body().lock().unwrap() = ResponseBody::Receiving(vec![]);
 
                     context.filemanager.lock().unwrap().fetch_file_in_chunks(
                         &mut done_sender,
                         reader,
-                        response.body.clone(),
+                        response.get_body().clone(),
                         context.cancellation_listener.clone(),
                         range,
                     );
@@ -802,7 +806,7 @@ async fn scheme_fetch(
 
             let (mut done_sender, done_receiver) = unbounded_channel();
             *done_chan = Some((done_sender.clone(), done_receiver));
-            *response.body.lock().unwrap() = ResponseBody::Receiving(vec![]);
+            *response.get_body().lock().unwrap() = ResponseBody::Receiving(vec![]);
 
             if let Err(err) = context.filemanager.lock().unwrap().fetch_file(
                 &mut done_sender,

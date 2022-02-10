@@ -53,7 +53,7 @@ def test_find_elements(session, inline, using, value):
 
     response = find_elements(session, using, value)
     assert_success(response)
-    assert len(response.body["value"]) == 1
+    assert len(response.get_body()["value"]) == 1
 
 
 @pytest.mark.parametrize("document,value", [
@@ -106,7 +106,7 @@ def test_no_element(session, using, value):
     # Step 8 - 9
     response = find_elements(session, using, value)
     assert_success(response)
-    assert response.body["value"] == []
+    assert response.get_body()["value"] == []
 
 
 @pytest.mark.parametrize("using,value",

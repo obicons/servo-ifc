@@ -45,7 +45,7 @@ checkResponseInit(usvString, "text/plain;charset=UTF-8", "This is a USVString");
 promise_test(function(test) {
   var body = "This is response body";
   var response = new Response(body);
-  return validateStreamFromString(response.body.getReader(), body);
+  return validateStreamFromString(response.get_body().getReader(), body);
 }, "Read Response's body as readableStream");
 
 promise_test(function(test) {
@@ -57,5 +57,5 @@ promise_test(function(test) {
 
 test(function() {
   var response = new Response(null, {status: 204});
-  assert_equals(response.body, null);
+  assert_equals(response.get_body(), null);
 }, "Testing null Response body");

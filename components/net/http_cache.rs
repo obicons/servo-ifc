@@ -315,7 +315,8 @@ fn create_cached_response(
         resource_timing,
     );
     response.headers = cached_headers.clone();
-    response.body = cached_resource.body.clone();
+    //response.get_body() = cached_resource.body.clone();
+    response.set_body(cached_resource.body.clone());
     if let ResponseBody::Receiving(_) = *cached_resource.body.lock().unwrap() {
         debug!("existing body is in progress");
         let (done_sender, done_receiver) = unbounded();
@@ -787,7 +788,8 @@ impl HttpCache {
                     cached_resource.data.metadata.data.final_url.clone(),
                     resource_timing,
                 );
-                constructed_response.body = cached_resource.body.clone();
+                //constructed_response.get_body() = cached_resource.body.clone();
+                constructed_response.set_body(cached_resource.body.clone());
                 constructed_response.status = cached_resource.data.status.clone();
                 constructed_response.https_state = cached_resource.data.https_state.clone();
                 constructed_response.referrer = request.referrer.to_url().cloned();
@@ -881,7 +883,7 @@ impl HttpCache {
         };
         let entry_resource = CachedResource {
             request_headers: Arc::new(Mutex::new(request.headers.clone())),
-            body: response.body.clone(),
+            body: response.get_body().clone(),
             aborted: response.aborted.clone(),
             awaiting_body: Arc::new(Mutex::new(vec![])),
             data: Measurable(MeasurableCachedResource {

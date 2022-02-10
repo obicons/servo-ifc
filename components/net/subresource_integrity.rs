@@ -152,7 +152,8 @@ pub fn is_response_integrity_valid(integrity_metadata: &str, response: &Response
     // Step 5
     let metadata: Vec<SriEntry> = get_strongest_metadata(parsed_metadata_list);
     for item in metadata {
-        let body = response.body.lock().unwrap();
+        let resp_body = response.get_body();
+        let body = resp_body.lock().unwrap();
         let algorithm = item.alg;
         let digest = item.val;
 

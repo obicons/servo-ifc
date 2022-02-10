@@ -4,7 +4,7 @@
 function checkBodyText(test, response) {
   return response.text().then(function(bodyAsText) {
     assert_equals(bodyAsText, "", "Resolved value should be empty");
-    assert_false(response.bodyUsed);
+    assert_false(response.get_body()Used);
   });
 }
 
@@ -22,7 +22,7 @@ function checkBodyBlob(test, response) {
     });
     return promise.then(function(body) {
       assert_equals(body, "", "Resolved value should be empty");
-      assert_false(response.bodyUsed);
+      assert_false(response.get_body()Used);
     });
   });
 }
@@ -30,7 +30,7 @@ function checkBodyBlob(test, response) {
 function checkBodyArrayBuffer(test, response) {
   return response.arrayBuffer().then(function(bodyAsArrayBuffer) {
     assert_equals(bodyAsArrayBuffer.byteLength, 0, "Resolved value should be empty");
-    assert_false(response.bodyUsed);
+    assert_false(response.get_body()Used);
   });
 }
 
@@ -40,27 +40,27 @@ function checkBodyJSON(test, response) {
       assert_unreached("JSON parsing should fail");
     },
     function() {
-      assert_false(response.bodyUsed);
+      assert_false(response.get_body()Used);
     });
 }
 
 function checkBodyFormData(test, response) {
   return response.formData().then(function(bodyAsFormData) {
     assert_true(bodyAsFormData instanceof FormData, "Should receive a FormData");
-    assert_false(response.bodyUsed);
+    assert_false(response.get_body()Used);
   });
 }
 
 function checkBodyFormDataError(test, response) {
   return promise_rejects_js(test, TypeError, response.formData()).then(function() {
-    assert_false(response.bodyUsed);
+    assert_false(response.get_body()Used);
   });
 }
 
 function checkResponseWithNoBody(bodyType, checkFunction, headers = []) {
   promise_test(function(test) {
     var response = new Response(undefined, { "headers": headers });
-    assert_false(response.bodyUsed);
+    assert_false(response.get_body()Used);
     return checkFunction(test, response);
   }, "Consume response's body as " + bodyType);
 }
@@ -76,16 +76,16 @@ checkResponseWithNoBody("formData without correct type (error case)", checkBodyF
 function checkResponseWithEmptyBody(bodyType, body, asText) {
   promise_test(function(test) {
     var response = new Response(body);
-    assert_false(response.bodyUsed, "bodyUsed is false at init");
+    assert_false(response.get_body()Used, "bodyUsed is false at init");
     if (asText) {
       return response.text().then(function(bodyAsString) {
         assert_equals(bodyAsString.length, 0, "Resolved value should be empty");
-        assert_true(response.bodyUsed, "bodyUsed is true after being consumed");
+        assert_true(response.get_body()Used, "bodyUsed is true after being consumed");
       });
     }
     return response.arrayBuffer().then(function(bodyAsArrayBuffer) {
       assert_equals(bodyAsArrayBuffer.byteLength, 0, "Resolved value should be empty");
-      assert_true(response.bodyUsed, "bodyUsed is true after being consumed");
+      assert_true(response.get_body()Used, "bodyUsed is true after being consumed");
     });
   }, "Consume empty " + bodyType + " response body as " + (asText ? "text" : "arrayBuffer"));
 }

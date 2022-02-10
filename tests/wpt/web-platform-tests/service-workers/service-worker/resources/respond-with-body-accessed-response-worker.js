@@ -77,17 +77,17 @@ self.addEventListener('fetch', function(event) {
         createResponse(params)
           .then(function(response) {
               // Touch .body here to test the behavior after touching it.
-              response.body;
+              response.get_body();
               return cloneResponseIfNeeded(params, response);
             })
           .then(function(response) {
               // Touch .body here to test the behavior after touching it.
-              response.body;
+              response.get_body();
               return passThroughCacheIfNeeded(params, event.request, response);
             })
           .then(function(response) {
               // Touch .body here to test the behavior after touching it.
-              response.body;
+              response.get_body();
               return response;
             }));
   });

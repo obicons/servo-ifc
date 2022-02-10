@@ -13,12 +13,12 @@ function checkReader(test, reader, promiseToTest)
 
 promise_test((test) => {
     return fetch("../resources/bad-chunk-encoding.py?count=1").then((response) => {
-        return checkReader(test, response.body.getReader(), reader => reader.read());
+        return checkReader(test, response.get_body().getReader(), reader => reader.read());
     });
 }, "Response reader read() promise should reject after a network error happening after resolving fetch promise");
 
 promise_test((test) => {
     return fetch("../resources/bad-chunk-encoding.py?count=1").then((response) => {
-        return checkReader(test, response.body.getReader(), reader => reader.closed);
+        return checkReader(test, response.get_body().getReader(), reader => reader.closed);
     });
 }, "Response reader closed promise should reject after a network error happening after resolving fetch promise");

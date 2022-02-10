@@ -108,7 +108,7 @@ directory_test(async (t, root) => {
   const wfs = await handle.createWritable();
 
   const response = await fetch('data:text/plain,fetched from far');
-  const body = await response.body;
+  const body = await response.get_body();
   await body.pipeTo(wfs, { preventCancel: true });
   assert_equals(await getFileContents(handle), 'fetched from far');
   assert_equals(await getFileSize(handle), 16);
@@ -119,7 +119,7 @@ directory_test(async (t, root) => {
   const wfs = await handle.createWritable();
 
   const response = await fetch('data:text/plain,fetched from far');
-  const body = await response.body;
+  const body = await response.get_body();
 
   const abortController = new AbortController();
   const signal = abortController.signal;

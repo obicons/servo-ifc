@@ -1,0 +1,3 @@
+[submodule "info-flow"]
+	path = info-flow
+	url = https://github.com/abarach/info-flow

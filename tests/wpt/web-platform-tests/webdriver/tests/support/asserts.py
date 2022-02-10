@@ -55,10 +55,10 @@ def assert_error(response, error_code):
     :param error_code: String value of the expected error code
     """
     assert response.status == errors[error_code]
-    assert "value" in response.body
-    assert response.body["value"]["error"] == error_code
-    assert isinstance(response.body["value"]["message"], six.text_type)
-    assert isinstance(response.body["value"]["stacktrace"], six.text_type)
+    assert "value" in response.get_body()
+    assert response.get_body()["value"]["error"] == error_code
+    assert isinstance(response.get_body()["value"]["message"], six.text_type)
+    assert isinstance(response.get_body()["value"]["stacktrace"], six.text_type)
     assert_response_headers(response.headers)
 
 
@@ -74,10 +74,10 @@ def assert_success(response, value=None):
     assert response.status == 200, str(response.error)
 
     if value is not None:
-        assert response.body["value"] == value
+        assert response.get_body()["value"] == value
 
     assert_response_headers(response.headers)
-    return response.body.get("value")
+    return response.get_body().get("value")
 
 
 def assert_response_headers(headers):

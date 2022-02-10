@@ -74,7 +74,7 @@
     function checkBodyText(test, response, expectedBody) {
       return response.text().then( function(bodyAsText) {
         assert_equals(bodyAsText, expectedBody, "Retrieve and verify response's body");
-        assert_true(response.bodyUsed, "body as text: bodyUsed turned true");
+        assert_true(response.get_body()Used, "body as text: bodyUsed turned true");
       });
     }
 
@@ -97,7 +97,7 @@
         });
         return promise.then(function(body) {
           assert_equals(body, expectedBody, "Retrieve and verify response's body");
-          assert_true(response.bodyUsed, "body as blob: bodyUsed turned true");
+          assert_true(response.get_body()Used, "body as blob: bodyUsed turned true");
         });
       });
     }
@@ -105,7 +105,7 @@
     function checkBodyArrayBuffer(test, response, expectedBody) {
       return response.arrayBuffer().then( function(bodyAsArrayBuffer) {
         validateBufferFromString(bodyAsArrayBuffer, expectedBody, "Retrieve and verify response's body");
-        assert_true(response.bodyUsed, "body as arrayBuffer: bodyUsed turned true");
+        assert_true(response.get_body()Used, "body as arrayBuffer: bodyUsed turned true");
       });
     }
 
@@ -113,7 +113,7 @@
       return response.json().then(function(bodyAsJSON) {
         var strBody = JSON.stringify(bodyAsJSON)
         assert_equals(strBody, expectedBody, "Retrieve and verify response's body");
-        assert_true(response.bodyUsed, "body as json: bodyUsed turned true");
+        assert_true(response.get_body()Used, "body as json: bodyUsed turned true");
       });
     }
 
@@ -123,7 +123,7 @@
         var entryName = "name";
         var strBody = responseStringToMultipartFormTextData(response, entryName, bodyAsFormData.get(entryName));
         assert_equals(strBody, expectedBody, "Retrieve and verify response's body");
-        assert_true(response.bodyUsed, "body as formData: bodyUsed turned true");
+        assert_true(response.get_body()Used, "body as formData: bodyUsed turned true");
      });
     }
 
@@ -133,20 +133,20 @@
         var entryName = "name";
         var strBody = entryName + "=" + bodyAsFormData.get(entryName);
         assert_equals(strBody, expectedBody, "Retrieve and verify response's body");
-        assert_true(response.bodyUsed, "body as formData: bodyUsed turned true");
+        assert_true(response.get_body()Used, "body as formData: bodyUsed turned true");
      });
     }
 
     function checkBodyFormDataError(test, response, expectedBody) {
       return promise_rejects_js(test, TypeError, response.formData()).then(function() {
-        assert_true(response.bodyUsed, "body as formData: bodyUsed turned true");
+        assert_true(response.get_body()Used, "body as formData: bodyUsed turned true");
       });
     }
 
     function checkResponseBody(responsePromise, expectedBody, checkFunction, bodyTypes) {
       promise_test(function(test) {
         return responsePromise.then(function(response) {
-          assert_false(response.bodyUsed, "bodyUsed is false at init");
+          assert_false(response.get_body()Used, "bodyUsed is false at init");
           return checkFunction(test, response, expectedBody);
         });
       }, "Consume response's body: " + bodyTypes);
@@ -199,7 +199,7 @@
     function checkFormDataResponseBody(responsePromise, expectedName, expectedValue, checkFunction, bodyTypes) {
       promise_test(function(test) {
         return responsePromise.then(function(response) {
-          assert_false(response.bodyUsed, "bodyUsed is false at init");
+          assert_false(response.get_body()Used, "bodyUsed is false at init");
           var expectedBody = responseStringToMultipartFormTextData(response, expectedName, expectedValue);
           return Promise.resolve().then(function() {
             if (checkFunction === checkBodyFormDataMultipart)

@@ -4,7 +4,7 @@
 function testFourColorsDecode(filename, mimeType) {
   return fetch(filename)
       .then(response => {
-        let decoder = new ImageDecoder({data: response.body, type: mimeType});
+        let decoder = new ImageDecoder({data: response.get_body(), type: mimeType});
         return decoder.decode();
       })
       .then(result => {
@@ -88,14 +88,14 @@ promise_test(t => {
 
 promise_test(t => {
   return fetch('four-colors.png').then(response => {
-    let decoder = new ImageDecoder({data: response.body, type: 'junk/type'});
+    let decoder = new ImageDecoder({data: response.get_body(), type: 'junk/type'});
     return promise_rejects_dom(t, 'NotSupportedError', decoder.decode());
   });
 }, 'Test invalid mime type rejects decode() requests');
 
 promise_test(t => {
   return fetch('four-colors.png').then(response => {
-    let decoder = new ImageDecoder({data: response.body, type: 'junk/type'});
+    let decoder = new ImageDecoder({data: response.get_body(), type: 'junk/type'});
     return promise_rejects_dom(
         t, 'NotSupportedError', decoder.decodeMetadata());
   });

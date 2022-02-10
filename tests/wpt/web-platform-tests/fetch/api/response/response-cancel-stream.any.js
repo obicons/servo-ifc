@@ -8,14 +8,14 @@ promise_test(function(test) {
 
 promise_test(function(test) {
     var response = new Response(new Blob(["This is data"], { "type" : "text/plain" }));
-    var reader = response.body.getReader();
+    var reader = response.get_body().getReader();
     reader.read();
     return reader.cancel();
 }, "Cancelling a loading blob Response stream");
 
 promise_test(function(test) {
     var response = new Response(new Blob(["T"], { "type" : "text/plain" }));
-    var reader = response.body.getReader();
+    var reader = response.get_body().getReader();
 
     var closedPromise = reader.closed.then(function() {
         return reader.cancel();
@@ -28,13 +28,13 @@ promise_test(function(test) {
 
 promise_test(function(test) {
     return fetch(RESOURCES_DIR + "trickle.py?ms=30&count=100").then(function(response) {
-        return response.body.cancel();
+        return response.get_body().cancel();
     });
 }, "Cancelling a starting Response stream");
 
 promise_test(function() {
     return fetch(RESOURCES_DIR + "trickle.py?ms=30&count=100").then(function(response) {
-        var reader = response.body.getReader();
+        var reader = response.get_body().getReader();
         return reader.read().then(function() {
             return reader.cancel();
         });
@@ -51,7 +51,7 @@ promise_test(function() {
     }
 
     return fetch(RESOURCES_DIR + "top.txt").then(function(response) {
-        var reader = response.body.getReader();
+        var reader = response.get_body().getReader();
         return readAll(reader).then(() => reader.cancel());
     });
 }, "Cancelling a closed Response stream");

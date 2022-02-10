@@ -31,6 +31,7 @@ num-traits = "0.2"
 percent-encoding = "2.0"
 piston_image = { package = "image", version = "0.23" }
 pixels = { path = "../pixels" }
+structs = { path = "../../info-flow/secrecy_examples/structs/" }
 serde = "1.0"
 servo_arc = { path = "../servo_arc" }
 servo_rand = { path = "../rand" }

@@ -1798,7 +1798,7 @@ async fn http_network_fetch(
     response.referrer = request.referrer.to_url().cloned();
     response.referrer_policy = request.referrer_policy.clone();
 
-    let res_body = response.body.clone();
+    let res_body = response.get_body().clone();
 
     // We're about to spawn a future to be waited on here
     let (done_sender, done_receiver) = unbounded_channel();

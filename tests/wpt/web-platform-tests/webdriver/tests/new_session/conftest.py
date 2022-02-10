@@ -69,7 +69,7 @@ def fixture_new_session(request, configuration, current_session):
 
         response = transport.send("POST", "session", body)
         if response.status == 200:
-            custom_session["session"] = response.body["value"]
+            custom_session["session"] = response.get_body()["value"]
         return response, custom_session.get("session", None)
 
     yield new_session

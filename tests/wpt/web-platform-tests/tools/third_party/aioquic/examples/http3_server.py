@@ -88,7 +88,7 @@ class HttpRequestHandler:
                 ]
                 + [(k, v) for k, v in message["headers"]],
             )
-        elif message["type"] == "http.response.body":
+        elif message["type"] == "http.response.get_body()":
             self.connection.send_data(
                 stream_id=self.stream_id,
                 data=message.get("body", b""),

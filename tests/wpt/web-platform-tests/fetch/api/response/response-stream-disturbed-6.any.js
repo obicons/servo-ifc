@@ -6,25 +6,25 @@
 test(() => {
   const stream = new ReadableStream();
   const response = new Response(stream);
-  assert_false(response.bodyUsed, "On construction");
+  assert_false(response.get_body()Used, "On construction");
 
   const reader = stream.getReader();
-  assert_false(response.bodyUsed, "After getting a reader");
+  assert_false(response.get_body()Used, "After getting a reader");
 
   reader.read();
-  assert_true(response.bodyUsed, "After calling stream.read()");
+  assert_true(response.get_body()Used, "After calling stream.read()");
 }, "A non-closed stream on which read() has been called");
 
 test(() => {
   const stream = new ReadableStream();
   const response = new Response(stream);
-  assert_false(response.bodyUsed, "On construction");
+  assert_false(response.get_body()Used, "On construction");
 
   const reader = stream.getReader();
-  assert_false(response.bodyUsed, "After getting a reader");
+  assert_false(response.get_body()Used, "After getting a reader");
 
   reader.cancel();
-  assert_true(response.bodyUsed, "After calling stream.cancel()");
+  assert_true(response.get_body()Used, "After calling stream.cancel()");
 }, "A non-closed stream on which cancel() has been called");
 
 test(() => {
@@ -34,13 +34,13 @@ test(() => {
     }
   });
   const response = new Response(stream);
-  assert_false(response.bodyUsed, "On construction");
+  assert_false(response.get_body()Used, "On construction");
 
   const reader = stream.getReader();
-  assert_false(response.bodyUsed, "After getting a reader");
+  assert_false(response.get_body()Used, "After getting a reader");
 
   reader.read();
-  assert_true(response.bodyUsed, "After calling stream.read()");
+  assert_true(response.get_body()Used, "After calling stream.read()");
 }, "A closed stream on which read() has been called");
 
 test(() => {
@@ -50,13 +50,13 @@ test(() => {
     }
   });
   const response = new Response(stream);
-  assert_false(response.bodyUsed, "On construction");
+  assert_false(response.get_body()Used, "On construction");
 
   const reader = stream.getReader();
-  assert_false(response.bodyUsed, "After getting a reader");
+  assert_false(response.get_body()Used, "After getting a reader");
 
   reader.read().then(() => { }, () => { });
-  assert_true(response.bodyUsed, "After calling stream.read()");
+  assert_true(response.get_body()Used, "After calling stream.read()");
 }, "An errored stream on which read() has been called");
 
 test(() => {
@@ -66,11 +66,11 @@ test(() => {
     }
   });
   const response = new Response(stream);
-  assert_false(response.bodyUsed, "On construction");
+  assert_false(response.get_body()Used, "On construction");
 
   const reader = stream.getReader();
-  assert_false(response.bodyUsed, "After getting a reader");
+  assert_false(response.get_body()Used, "After getting a reader");
 
   reader.cancel().then(() => { }, () => { });
-  assert_true(response.bodyUsed, "After calling stream.cancel()");
+  assert_true(response.get_body()Used, "After calling stream.cancel()");
 }, "An errored stream on which cancel() has been called");

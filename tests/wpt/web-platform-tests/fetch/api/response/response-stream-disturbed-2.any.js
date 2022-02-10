@@ -3,7 +3,7 @@
 
 function createResponseWithLockedReadableStream(callback) {
     return fetch("../resources/data.json").then(function(response) {
-        var reader = response.body.getReader();
+        var reader = response.get_body().getReader();
         return callback(response);
     });
 }

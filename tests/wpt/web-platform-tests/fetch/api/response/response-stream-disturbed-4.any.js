@@ -3,7 +3,7 @@
 
 function createResponseWithCancelledReadableStream(callback) {
     return fetch("../resources/data.json").then(function(response) {
-        response.body.cancel();
+        response.get_body().cancel();
         return callback(response);
     });
 }
