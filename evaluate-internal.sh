@@ -12,7 +12,10 @@ HEADER="time,rss"
 readonly NUM_TRIALS PREVIOUS_SHA MODIFIED_BUILD_TIMES MODIFIED_TEST_TIMES   \
          ORIGINAL_BUILD_TIMES ORIGINAL_TEST_TIMES HEADER
 
-echo "time,rss" > ~/modified-builds.csv
+echo "$HEADER" > "$MODIFIED_BUILD_TIMES"
+echo "$HEADER" > "$MODIFIED_TEST_TIMES"
+echo "$HEADER" > "$ORIGINAL_BUILD_TIMES"
+echo "$HEADER" > "$ORIGINAL_TEST_TIMES"
 
 . python/_virtualenv3.9/bin/activate
 

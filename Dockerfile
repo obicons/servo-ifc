@@ -63,4 +63,5 @@ RUN git config --global --add safe.directory /home/servo/servo &&   \
     . python/_virtualenv3.9/bin/activate &&                         \
     ./mach build --dev
 
+RUN mkdir /home/servo/results
 VOLUME "/home/servo/results"
