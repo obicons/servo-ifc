@@ -29,7 +29,9 @@ RUN apt-get update &&                                       \
         libxcb-xfixes0-dev                                  \
         m4                                                  \
         pkg-config                                          \
-        software-properties-common &&                       \
+        software-properties-common                          \
+        sudo                                                \
+        time &&                                             \
     add-apt-repository ppa:deadsnakes/ppa &&                \
     DEBIAN_FRONTEND=noninteractive apt-get install -y       \
         python3.9-dev                                       \
@@ -39,15 +41,17 @@ RUN apt-get update &&                                       \
     ln -s /usr/bin/python3.9 /usr/bin/python3 &&            \
     python3.9 -m ensurepip --upgrade &&                     \
     python3.9 -m pip install --upgrade pip &&               \
-    python3.9 -m pip install setuptools virtualenv &&       \
-    python3.9 -m virtualenv -p python3.9                    \
+    python3.9 -m pip install setuptools virtualenv
+
+RUN echo "servo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+USER servo
+RUN python3.9 -m virtualenv -p python3.9                    \
         --system-site-package python/_virtualenv3.9 &&      \
     . python/_virtualenv3.9/bin/activate &&                 \
     python3.9 -m pip install -r python/requirements.txt &&  \
     ./mach bootstrap &&                                     \
-    rm -r /var/lib/apt/lists/*
-
-USER servo
+    sudo rm -r /var/lib/apt/lists/*
 
 RUN curl https://sh.rustup.rs > rustup-init.sh  &&   \
     sh ./rustup-init.sh -y
@@ -58,3 +62,5 @@ RUN git config --global --add safe.directory /home/servo/servo &&   \
     . /home/servo/.cargo/env &&                                     \
     . python/_virtualenv3.9/bin/activate &&                         \
     ./mach build --dev
+
+VOLUME "/home/servo/results"
