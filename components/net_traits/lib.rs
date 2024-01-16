@@ -2,9 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
- // It sucks we had to remove this.
 // #![deny(unsafe_code)]
-
+#![feature(derive_default_enum)]
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]

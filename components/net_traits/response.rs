@@ -14,8 +14,11 @@ use servo_url::ServoUrl;
 use std::sync::atomic::AtomicBool;
 use std::sync::Mutex;
 
-use structs::secret::secret as secrets;
-use structs::lattice::ternary_lattice as lattice;
+use secret_structs;
+use secret_structs::secret as secrets;
+use secret_structs::secret::InvisibleSideEffectFree;
+use macros::secret_block;
+use secret_structs::lattice as lattice;
 
 /// [Response type](https://fetch.spec.whatwg.org/#concept-response-type)
 #[derive(Clone, Debug, Deserialize, MallocSizeOf, PartialEq, Serialize)]
@@ -38,12 +41,15 @@ pub enum TerminationReason {
 
 /// The response body can still be pushed to after fetch
 /// This provides a way to store unfinished response bodies
-#[derive(Clone, Debug, MallocSizeOf, PartialEq)]
+#[derive(Clone, Debug, Default, MallocSizeOf, PartialEq)]
 pub enum ResponseBody {
+    #[default]
     Empty, // XXXManishearth is this necessary, or is Done(vec![]) enough?
     Receiving(Vec<u8>),
     Done(Vec<u8>),
 }
+
+unsafe impl InvisibleSideEffectFree for ResponseBody {}
 
 impl ResponseBody {
     pub fn is_done(&self) -> bool {
@@ -101,7 +107,7 @@ pub struct Response {
     #[ignore_malloc_size_of = "Mutex heap size undefined"]
     //pub body: Arc<Mutex<ResponseBody>>,
     //body: secrets::Secret<Arc<Mutex<ResponseBody>>, lattice::C>,
-    body: Arc<Mutex<secrets::Secret<ResponseBody, lattice::C>>>,
+    body: Arc<Mutex<secrets::Secret<ResponseBody, lattice::Label_C>>>,
     pub cache_state: CacheState,
     pub https_state: HttpsState,
     pub referrer: Option<ServoUrl>,
@@ -133,7 +139,8 @@ impl Response {
             status: Some((StatusCode::OK, "".to_string())),
             raw_status: Some((200, b"".to_vec())),
             headers: HeaderMap::new(),
-            body: Arc::new(Mutex::new(secrets::Secret::new(ResponseBody::Empty))),
+            //body: Arc::new(Mutex::new(secrets::Secret::new(ResponseBody::Empty))),
+            body: Arc::new(Mutex::new(secret_block!(lattice::Label_C { wrap_secret(ResponseBody::Empty) }))),
             cache_state: CacheState::None,
             https_state: HttpsState::None,
             referrer: None,
@@ -170,7 +177,8 @@ impl Response {
 
     pub fn set_body(&mut self, body: Arc<Mutex<ResponseBody>>) {
         let b = (*body).lock().unwrap().clone();
-        self.body = Arc::new(Mutex::new(secrets::Secret::new(b)) );
+        //self.body = Arc::new(Mutex::new(secrets::Secret::new(b)) );
+        self.body = Arc::new(Mutex::new(secret_block!(lattice::Label_C { wrap_secret(b) })));
     }
 
     pub fn network_error(e: NetworkError) -> Response {
@@ -182,7 +190,8 @@ impl Response {
             status: None,
             raw_status: None,
             headers: HeaderMap::new(),
-            body: Arc::new(Mutex::new(secrets::Secret::new(ResponseBody::Empty))),
+            //body: Arc::new(Mutex::new(secrets::Secret::new(ResponseBody::Empty))),
+            body: Arc::new(Mutex::new(secret_block!(lattice::Label_C { wrap_secret(ResponseBody::Empty) }))),
             cache_state: CacheState::None,
             https_state: HttpsState::None,
             referrer: None,

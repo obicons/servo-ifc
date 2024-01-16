@@ -1,0 +1,45 @@
+diff --git a/ifc_library/secret_structs/src/secret.rs b/ifc_library/secret_structs/src/secret.rs
+index 2f4a00a..a3dc5ff 100644
+--- a/ifc_library/secret_structs/src/secret.rs
++++ b/ifc_library/secret_structs/src/secret.rs
+@@ -449,7 +449,7 @@ macro_rules! mul_assign_impl {
+ mul_assign_impl! { usize u8 u16 u32 u64 u128 isize i8 i16 i32 i64 i128 f32 f64 }
+ 
+ /* Division */
+-#[const_trait]
++//#[const_trait]
+ pub unsafe trait SafeDiv<Rhs = Self> {
+     type Output;
+     fn safe_div(self, rhs: Rhs) -> Self::Output;
+@@ -788,7 +788,7 @@ pub unsafe trait SafeDrop {}
+ pub unsafe trait SafeFn {}
+ pub unsafe trait SafeFnMut {}
+ pub unsafe trait SafeFnOnce {}
+-#[const_trait]
++//#[const_trait]
+ 
+ pub unsafe trait SafeBitXor<Rhs = Self> {
+     type Output;
+@@ -859,14 +859,14 @@ unsafe impl SafeIndexExpr for &mut std::ffi::OsString{}
+ unsafe impl SafeIndexExpr for str {}
+ unsafe impl SafeIndexExpr for &str {}
+ unsafe impl SafeIndexExpr for &mut str {}
+-unsafe impl<K, V, A> SafeIndexExpr for std::collections::BTreeMap<K, V, A> 
+-    where A: std::alloc::Allocator + std::clone::Clone, K: std::cmp::Ord, {}
+-unsafe impl<K, V, A> SafeIndexExpr for &std::collections::BTreeMap<K, V, A> 
+-    where A: std::alloc::Allocator + std::clone::Clone, K: std::cmp::Ord, {}
+-unsafe impl<K, V, A> SafeIndexExpr for &mut std::collections::BTreeMap<K, V, A> 
+-    where A: std::alloc::Allocator + std::clone::Clone, K: std::cmp::Ord, {}
+-unsafe impl<K, V, S> SafeIndexExpr for std::collections::HashMap<K, V, S>
+-    where K: std::cmp::Eq + std::hash::Hash, S: std::hash::BuildHasher, {}
++//unsafe impl<K, V, A> SafeIndexExpr for std::collections::BTreeMap<K, V, A> 
++//    where A: std::alloc::Allocator + std::clone::Clone, K: std::cmp::Ord, {}
++//unsafe impl<K, V, A> SafeIndexExpr for &std::collections::BTreeMap<K, V, A> 
++//    where A: std::alloc::Allocator + std::clone::Clone, K: std::cmp::Ord, {}
++//unsafe impl<K, V, A> SafeIndexExpr for &mut std::collections::BTreeMap<K, V, A> 
++ //   where A: std::alloc::Allocator + std::clone::Clone, K: std::cmp::Ord, {}
++//unsafe impl<K, V, S> SafeIndexExpr for std::collections::HashMap<K, V, S>
++    //where K: std::cmp::Eq + std::hash::Hash, S: std::hash::BuildHasher, {}
+ unsafe impl<K, V, S> SafeIndexExpr for &std::collections::HashMap<K, V, S>
+     where K: std::cmp::Eq + std::hash::Hash, S: std::hash::BuildHasher, {}
+ unsafe impl<K, V, S> SafeIndexExpr for &mut std::collections::HashMap<K, V, S>

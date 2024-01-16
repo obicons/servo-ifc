@@ -1,8 +1,6 @@
 FROM ubuntu:20.04
 
 RUN adduser --disabled-password --home /home/servo/ servo
-COPY --chown=servo:servo . /home/servo/servo
-WORKDIR /home/servo/servo
 
 RUN apt-get update &&                                       \
     DEBIAN_FRONTEND=noninteractive apt-get install -y       \
@@ -45,6 +43,9 @@ RUN apt-get update &&                                       \
 
 RUN echo "servo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
+COPY --chown=servo:servo . /home/servo/servo
+WORKDIR /home/servo/servo
+
 USER servo
 RUN python3.9 -m virtualenv -p python3.9                    \
         --system-site-package python/_virtualenv3.9 &&      \
@@ -57,6 +58,9 @@ RUN curl https://sh.rustup.rs > rustup-init.sh  &&   \
     sh ./rustup-init.sh -y
 
 RUN python3.9 -m pip install voluptuous pyyaml
+
+RUN cd /home/servo/servo/info-flow-library/ &&  \
+    git apply ../ifc-patch.patch
 
 RUN git config --global --add safe.directory /home/servo/servo &&   \
     . /home/servo/.cargo/env &&                                     \

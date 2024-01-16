@@ -26,6 +26,7 @@ opt-level = 3
 #     [patch."https://github.com/servo/<repository>"]
 #     <crate> = { path = "/path/to/local/checkout" }
 structs = { path = "./info-flow-library/ifc_library/secret_structs/", package="secret_structs" }
+macros = { path = "./info-flow-library/ifc_library/macros/", package="secret_macros" }
 
 # This is here to dedupe winapi since mio 0.6 is still using winapi 0.2.
 mio = { git = "https://github.com/servo/mio.git", branch = "servo-mio-0.6.22" }
