@@ -60,6 +60,7 @@ RUN curl https://sh.rustup.rs > rustup-init.sh  &&   \
 RUN python3.9 -m pip install voluptuous pyyaml
 
 RUN cd /home/servo/servo/info-flow-library/ &&  \
+    git init . &&                               \
     git apply ../ifc-patch.patch
 
 RUN git config --global --add safe.directory /home/servo/servo &&   \
