@@ -25,7 +25,7 @@ while [[ "$x" -lt "$NUM_TRIALS" ]]; do
     echo "Trial ${x} / ${NUM_TRIALS}"
 
     echo "(Modified) Measuring build times..."
-    git checkout master >/dev/null 2>/dev/null
+    git checkout --force master >/dev/null 2>/dev/null
 
     # Need to save our virtual environment because mach destroys it.
     cp -r python/_virtualenv3.9/ python/_virtualenv3.9_backup
@@ -43,7 +43,7 @@ while [[ "$x" -lt "$NUM_TRIALS" ]]; do
     modified_test_rss=$(echo "$modified_test_result" | cut -d' ' -f2)
     echo "${modified_test_time},${modified_test_rss}" >> "$MODIFIED_TEST_TIMES"
 
-    git checkout "$ORIGINAL_SHA" >/dev/null 2>/dev/null
+    git checkout --force "$ORIGINAL_SHA" >/dev/null 2>/dev/null
 
     # Need to save our virtual environment because mach destroys it.
     cp -r python/_virtualenv3.9/ python/_virtualenv3.9_backup
